@@ -5,7 +5,9 @@ import {
 import {
     getAuth, signInWithRedirect,
     signInWithPopup,
-    GoogleAuthProvider
+    GoogleAuthProvider,
+    
+    createUserWithEmailAndPassword
 } from "firebase/auth";
 
 import {
@@ -36,36 +38,57 @@ const firebaseConfig = {
 
   export const auth = getAuth();
   export const signInWithGooglePopup = () => signInWithPopup(auth,provider);
+  export const signInWithGoogleRedirect = () => signInWithRedirect(auth, provider);
 
   export const db = getFirestore();
 
   export const createUserDocumentFromAuth = async (userAuth) =>{
-      const userDocRef = doc(db, "users", userAuth.uid);
+      if(!userAuth) return;
 
-      console.log(userDocRef);
+      const userDocRef = doc(db, "users", userAuth.uid);
 
       const userSnapshot = await getDoc(userDocRef);
 
-      console.log(userSnapshot);
-      console.log(userSnapshot.exists());
+      const {displayName, email} = userAuth;
+      createUserIfNotExists(userSnapshot,displayName, email, userDocRef);
 
-      if(!userSnapshot.exists()){
-        const {displayName, email}= userAuth;
-        const createdAt = new Date();
+      return userDocRef;
+  }
 
-        try {
+  export const createAuthUserWithEmailAndPassword = async(displayName,email, password) => {
+
+    if(!email || !password) return;
+
+    const userCredential = await createUserWithEmailAndPassword(auth,email,password);
+
+    if(!!userCredential?.user){
+      const userDocRef = doc(db, "users", userCredential.user.uid);
+
+      const userSnapshot = await getDoc(userDocRef);
+  
+      await createUserIfNotExists(userSnapshot,displayName, email, userDocRef);
+    }
+
+
+    console.log(userCredential);
+
+    return userCredential;
+  } 
+
+
+  const createUserIfNotExists = async(userSnapshot,displayName,email,userDocRef) =>{
+    if(!userSnapshot.exists()){
+      const createdAt = new Date();
+
+      try {
+      
+          // await db.collection("users").doc(userSnapshot.uid).set({ displayName, email, createdAt})
           await setDoc(userDocRef, {
             displayName, email, createdAt
           });
-        } catch(error){
-          console.log('error creating the user',error.message);
-        }
+    
+      } catch(error){
+        console.log('error creating the user',error.message);
       }
-
-      // if user data does not exit
-      // create /set the document
-
-      // if user exists
-
-      return userDocRef;
+    }
   }
