@@ -7,7 +7,8 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
     
-    createUserWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword
 } from "firebase/auth";
 
 import {
@@ -74,6 +75,31 @@ const firebaseConfig = {
 
     return userCredential;
   } 
+
+  export const signInAuthUserWithEmailWihEmailAndPassword = async(email, password) =>{
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email,password);
+
+      return userCredential;
+    }catch(error){
+      console.log(error.message);
+
+      switch(error.message){
+        case "Firebase: Error (auth/wrong-password).":
+          alert("Senha incorreta !");
+          break;
+        case "Firebase: Error (auth/invalid-email).":
+          alert("Email inválido !");
+          break;
+        case "Firebase: Error (auth/user-not-found).":
+          alert("Usuário não encontrado !");
+          break;
+        default:
+          alert("Houve um erro");
+      }
+    }
+
+  }
 
 
   const createUserIfNotExists = async(userSnapshot,displayName,email,userDocRef) =>{
