@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../../contexts/user.context";
 import { createUserDocumentFromAuth, signInAuthUserWithEmailWihEmailAndPassword, signInWithGooglePopup } from "../../utils/firebase/firebase.utils";
 import Button from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
@@ -24,15 +25,14 @@ const SignInForm = () => {
     }
 
     const logGoogleUser = async () =>{
-        const {user} = await signInWithGooglePopup ();
-        const userDocRef = await createUserDocumentFromAuth( user);
+        await signInWithGooglePopup ();
+
     }
 
     const signIn = async ( event)=> {
-        event.preventDefault();
+       event.preventDefault();
 
-        const userCredential =await signInAuthUserWithEmailWihEmailAndPassword(email, password);
-        console.log(userCredential);
+       await signInAuthUserWithEmailWihEmailAndPassword(email, password);
     }
 
     return (
@@ -58,7 +58,7 @@ const SignInForm = () => {
                 <Button  
                     buttonType="google" 
                     type="button"
-                    onClick={logGoogleUser}>Sign In With Google</Button>
+                    onClick={logGoogleUser}>Goggle Sign In</Button>
             </div>
 
         </form>

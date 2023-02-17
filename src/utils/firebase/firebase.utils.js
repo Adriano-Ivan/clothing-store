@@ -6,9 +6,10 @@ import {
     getAuth, signInWithRedirect,
     signInWithPopup,
     GoogleAuthProvider,
-    
+  signOut,
     createUserWithEmailAndPassword,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    onAuthStateChanged
 } from "firebase/auth";
 
 import {
@@ -101,6 +102,14 @@ const firebaseConfig = {
 
   }
 
+
+  export const signOutUser = async() =>{
+    return await signOut(auth)
+  } ;
+
+  export const onAuthStateChangedListener = (callback) =>{
+    return onAuthStateChanged(auth, callback);
+  }
 
   const createUserIfNotExists = async(userSnapshot,displayName,email,userDocRef) =>{
     if(!userSnapshot.exists()){

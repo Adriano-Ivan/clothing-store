@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../contexts/user.context";
 import { createAuthUserWithEmailAndPassword } from "../../utils/firebase/firebase.utils";
 import Button from "../button/button.component";
 import FormInput from "../form-input/form-input.component";
@@ -49,7 +50,7 @@ const SignUpForm = () => {
         try {
             console.log(email , password);
             const {user} = await createAuthUserWithEmailAndPassword(displayName,email, password);
-    
+        
             if(!!user){
                 alert("Usuário criado")
             }
