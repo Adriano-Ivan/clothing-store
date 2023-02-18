@@ -19,11 +19,35 @@ const addCartItem = (cartItems, productToAdd) => {
     return cartItemsToDefine;
 }
 
+const increaseOrDecreaseQuantityOfCartItem = (cartItems, product,increase)  => {
+    const newCartItems =  [...cartItems.map((item ) =>{
+        if(item.id === product.id){
+            if(increase){
+                item.quantity += 1;
+            } else {
+                if(item.quantity >0){
+                    item.quantity -= 1;
+                }
+            }
+            
+        }
+        
+        return item;
+    }).filter((item )=> item.quantity > 0)];
+
+    return newCartItems;
+}
+
 export const CartContext = createContext({
     dropdownCartIsOpen : false,
     setDropdownCartIsOpen: () => {},
     cartItems: [],
-    addItemToCart: () => {}
+    addItemToCart: () => {},
+    numberOfItems: () =>{},
+    numberOfProducts: () =>{},
+    increaseQuantityOfCartItem: () =>{},
+    decreaseQuantityOfCartItem: () =>{},
+    deleteCartItem: () =>{}
 });
 
 export const CartProvider = ({children})=>{
@@ -44,13 +68,35 @@ export const CartProvider = ({children})=>{
         return cartItems.length;
     }
 
+    const totalPrice = () => {
+        return cartItems.reduce((ac, current) => ac + (current.price * current.quantity), 0);
+    }
+
+    const increaseQuantityOfCartItem = (productToIncrease) =>{
+        setCartItems(increaseOrDecreaseQuantityOfCartItem(cartItems, productToIncrease, true));
+    }
+
+    const decreaseQuantityOfCartItem = (productToIncrease) =>{
+        setCartItems(increaseOrDecreaseQuantityOfCartItem(cartItems, productToIncrease, false));
+    }
+
+    const deleteCartItem = (productToDelete) => {
+        setCartItems(
+            cartItems.filter((item) => item.id !== productToDelete.id)
+        );
+    }
+
     const value={
         dropdownCartIsOpen,
         cartItems,
         setDropdownCartIsOpen,
         addItemToCart,
         numberOfItems,
-        numberOfProducts
+        numberOfProducts,
+        totalPrice,
+        decreaseQuantityOfCartItem,
+        increaseQuantityOfCartItem,
+        deleteCartItem,
     }
 
     return <CartContext.Provider value={value}>
