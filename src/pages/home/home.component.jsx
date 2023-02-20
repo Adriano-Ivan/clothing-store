@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Outlet } from "react-router-dom";
 import Categories from "../../components/categories/categories.component";
 

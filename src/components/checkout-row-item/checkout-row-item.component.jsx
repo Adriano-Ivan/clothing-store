@@ -21,7 +21,7 @@ const CheckoutRowItem = ({cartItem}) =>{
     return (
         <div className="checkout-item-container">
             <div className="image-container ">
-                <img src={imageUrl}/>
+                <img src={imageUrl} alt={name}/>
             </div>
             <div className="name">
                 {name}

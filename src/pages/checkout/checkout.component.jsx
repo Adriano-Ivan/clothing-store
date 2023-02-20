@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { Fragment, useContext } from "react";
 import CheckoutRowItem from "../../components/checkout-row-item/checkout-row-item.component";
 import { CartContext } from "../../contexts/cart.context";
 import "./checkout.styles.scss";
@@ -7,7 +7,7 @@ const Checkout = () => {
     const {cartItems,totalPrice} = useContext(CartContext);
 
     return (
-        <>
+        <Fragment>
             <div className="checkout-container">
                 <div className="checkout-header">
                         <div className="header-block">Product</div>
@@ -27,7 +27,7 @@ const Checkout = () => {
                 </span>
             </div>
 
-        </>
+        </Fragment>
       
     );
 }
