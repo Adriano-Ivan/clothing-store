@@ -1,7 +1,7 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useContext } from "react";
 import CategoryPreview from "../../components/category-preview/category-preview.component";
 import { CategoriesContext } from "../../contexts/categories.context";
-import "./categories-preview.styles.scss";
+import { CategoriesPreviewContainer } from "./categories-preview.styles";
 
 const CategoriesPreview = () => {
     const {categories} = useContext(CategoriesContext);
@@ -17,7 +17,7 @@ const CategoriesPreview = () => {
 
     return (
 
-        <div className="categories-preview-container">
+        <CategoriesPreviewContainer>
             {
                 Object.keys(categories).map((title,index) => {
                     return <Fragment key={title}>
@@ -26,7 +26,7 @@ const CategoriesPreview = () => {
                 })
             }
 
-        </div>
+        </CategoriesPreviewContainer>
 
     );
 }
