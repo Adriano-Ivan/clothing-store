@@ -1,3 +1,23 @@
+import logger from 'redux-logger';
+import { configureStore } from '@reduxjs/toolkit';
+import { rootReducer } from './root-reducer';
+import persistStore from 'redux-persist/es/persistStore';
+import { getDefaultNormalizer } from '@testing-library/react';
+
+const middleWares = [process.env.NODE_ENV === 'development' && logger].filter(
+  Boolean
+);
+
+export const store = configureStore({
+  reducer: rootReducer,
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+  //   serializableCheck:false
+  // }).concat(middleWares)
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middleWares)
+});
+
+// export const persistor = persistStore(store);
+/*
 import { compose, createStore, applyMiddleware } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -32,3 +52,4 @@ export const store = createStore(
 );
 
 export const persistor = persistStore(store);
+*/
